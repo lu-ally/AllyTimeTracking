@@ -38,6 +38,18 @@ export function TimeInput({
     onChange(v);
   }
 
+  function handleBlur() {
+    // Pad single-digit hour: "9:00" -> "09:00"
+    const match = value.match(/^(\d{1,2}):(\d{2})$/);
+    if (match) {
+      const padded = match[1].padStart(2, "0") + ":" + match[2];
+      if (padded !== value) {
+        onChange(padded);
+      }
+    }
+    onBlur?.();
+  }
+
   return (
     <Input
       ref={inputRef}
@@ -45,7 +57,7 @@ export function TimeInput({
       inputMode="numeric"
       value={value}
       onChange={handleChange}
-      onBlur={onBlur}
+      onBlur={handleBlur}
       onKeyDown={onKeyDown}
       placeholder={placeholder}
       disabled={disabled}

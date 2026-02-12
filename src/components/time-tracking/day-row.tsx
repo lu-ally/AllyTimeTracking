@@ -55,6 +55,7 @@ export function DayRow({ date, entry, targetHours }: DayRowProps) {
 
   async function handleSave() {
     if (!startTime || !endTime) return;
+    if (!/^\d{2}:\d{2}$/.test(startTime) || !/^\d{2}:\d{2}$/.test(endTime)) return;
     setIsSaving(true);
     const result = await upsertTimeEntry({
       date: dateStr,

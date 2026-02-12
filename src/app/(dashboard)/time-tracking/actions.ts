@@ -9,7 +9,8 @@ export async function upsertTimeEntry(data: unknown) {
   const session = await requireAuth();
   const parsed = timeEntrySchema.safeParse(data);
   if (!parsed.success) {
-    return { success: false as const, error: "Ungueltige Eingabe" };
+    const issues = parsed.error.issues.map((i) => `${i.path.join(".")}: ${i.message}`).join(", ");
+    return { success: false as const, error: `Ungueltige Eingabe: ${issues}` };
   }
 
   const { date, startTime, endTime, breakMinutes, notes } = parsed.data;
